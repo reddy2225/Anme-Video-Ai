@@ -1,0 +1,101 @@
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { motion } from "framer-motion";
+import { Switch } from "@/components/ui/switch";
+import { Input } from "@/components/ui/input";
+
+export default function Home() {
+  const [demoPlaying, setDemoPlaying] = useState(false);
+  const [darkMode, setDarkMode] = useState(false);
+  const [theme, setTheme] = useState("default");
+  const [textInput, setTextInput] = useState("");
+  const [isGenerating, setIsGenerating] = useState(false);
+
+  const handleGenerate = () => {
+    setIsGenerating(true);
+    setTimeout(() => setIsGenerating(false), 3000);
+  };
+
+  return (
+    <div className={`${darkMode ? "bg-black text-white" : "bg-gray-900 text-white"} min-h-screen relative`}> 
+      {/* Background Video */}
+      <video autoPlay loop muted className="absolute top-0 left-0 w-full h-full object-cover opacity-10 z-0">
+        <source src="/background.mp4" type="video/mp4" />
+      </video>
+      
+      <div className="relative z-10">
+        {/* Theme Customization */}
+        <div className="absolute top-4 left-4">
+          <select value={theme} onChange={(e) => setTheme(e.target.value)} className="p-2 bg-gray-700 text-white rounded">
+            <option value="default">Default</option>
+            <option value="blue">Blue Theme</option>
+            <option value="purple">Purple Theme</option>
+          </select>
+        </div>
+
+        {/* Dark Mode Toggle */}
+        <div className="absolute top-4 right-4 flex items-center">
+          <span className="mr-2">Dark Mode</span>
+          <Switch checked={darkMode} onCheckedChange={setDarkMode} />
+        </div>
+        
+        {/* Hero Section */}
+        <motion.section 
+          initial={{ opacity: 0, y: -20 }} 
+          animate={{ opacity: 1, y: 0 }} 
+          transition={{ duration: 0.5 }}
+          className="text-center py-20"
+        >
+          <h1 className="text-5xl font-bold hover:scale-105 transition-transform">Anme Video AI</h1>
+          <p className="text-xl mt-4">Your Story, Your AI-Animation</p>
+          <Button className="mt-6">Try the Demo</Button>
+        </motion.section>
+        
+        {/* Demo Section */}
+        <motion.section 
+          initial={{ opacity: 0, y: 20 }} 
+          animate={{ opacity: 1, y: 0 }} 
+          transition={{ duration: 0.5, delay: 0.3 }}
+          className="py-10 px-4 flex flex-col items-center"
+        >
+          <h2 className="text-3xl font-semibold">Demo Preview</h2>
+          <Card className="w-96 mt-6 hover:shadow-lg transition-shadow">
+            <CardContent className="flex justify-center items-center h-56 bg-gray-800">
+              {demoPlaying ? <p>Playing AI Animation...</p> : <p>Demo Placeholder</p>}
+            </CardContent>
+          </Card>
+          <Button className="mt-4" onClick={() => setDemoPlaying(!demoPlaying)}>
+            {demoPlaying ? "Stop Demo" : "Play Demo"}
+          </Button>
+          <p className="mt-4">Or try our interactive AI preview!</p>
+          <Input 
+            className="mt-2 w-80 p-2 text-black" 
+            placeholder="Enter your story..." 
+            value={textInput} 
+            onChange={(e) => setTextInput(e.target.value)} 
+          />
+          <Button className="mt-2" onClick={handleGenerate} disabled={isGenerating}>
+            {isGenerating ? "Generating..." : "Generate AI Animation"}
+          </Button>
+        </motion.section>
+        
+        {/* Testimonials/Showcase Section */}
+        <motion.section 
+          initial={{ opacity: 0, y: 20 }} 
+          animate={{ opacity: 1, y: 0 }} 
+          transition={{ duration: 0.5, delay: 0.6 }}
+          className="py-10 px-4 text-center"
+        >
+          <h2 className="text-3xl font-semibold">Showcase</h2>
+          <p className="mt-2">See what AI-generated anime looks like!</p>
+          <div className="flex justify-center mt-6">
+            <video controls className="w-80 border border-gray-500 rounded-lg">
+              <source src="/sample-ai-video.mp4" type="video/mp4" />
+            </video>
+          </div>
+        </motion.section>
+      </div>
+    </div>
+  );
+}
